@@ -15,34 +15,57 @@
 #include "rtGetNaN.h"
 #include "t_16qam_emxutil.h"
 #include <stdio.h>
-int main()
+static void argInit_1000x3_real_T(double result[3000])
 {
-	double dvo[3000];
-//	int data[3000];
-	emxArray_creal_T *y;
-	emxInitArray_creal_T(&y, 2);
-	/*myInitArray_creal_T(&y, 1002);*/
-
-	double  N = 1000;
+	int idx0;
+	int idx1;
 	FILE *p;
 	errno_t  fp = fopen_s(&p, "data.txt", "r");
 	if (!p)
 	{
 		printf("can't open file\n");
-		return -1;
+		return ;
 	}
-	for (int i = 0; i < 3000; i++)
-	{
-		int d = 3;
-		fscanf_s(p, "%d", &d);
-		if (d == 0 || d == 1)
-			dvo[i] = d;
-		else
-			i--;
+	/* Loop over the array to initialize each element. */
+	for (idx0 = 0; idx0 < 1000; idx0++) {
+		for (idx1 = 0; idx1 < 3; idx1++) {
+			/* Set the value of the array element.
+			Change this value to the value that the application requires. */
+			int d = 3;
+			fscanf_s(p, "%d", &d);
+			result[idx0 + 1000 * idx1] = d;
+		}
 	}
-//	fscanf_s(p, "%d", &dvo);
+}
+
+int main()
+{
+	double dvo[3000];
+	emxArray_creal_T *y;
+	emxInitArray_creal_T(&y, 2);
+
+	double  N = 1000;
+	//FILE *p;
+	//errno_t  fp = fopen_s(&p, "data.txt", "r");
+	//if (!p)
+	//{
+	//	printf("can't open file\n");
+	//	return -1;
+	//}
+	//for (int i = 0; i < 3000; i++)
+	//{
+	//	int d = 3;
+	//	fscanf_s(p, "%d", &d);
+	//	if (d == 0 || d == 1)
+	//		dvo[i] = d;
+	//	else
+	//		i--;
+	//}
+	//fp = fclose(p);
+	
+	argInit_1000x3_real_T(dvo);
 	t_16qam(dvo, N, y);
-	fp = fclose(p);
+	
 	FILE *r;
 	errno_t rp = fopen_s(&r, "result.txt", "w");
 	if (rp == 0)
