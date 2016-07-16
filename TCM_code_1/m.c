@@ -55,7 +55,7 @@ int main()
 			fputc(' ', r);
 		//	fputc(y->data[i].im, r);
 			fprintf(r, "%d",(int) y->data[i].im);
-			fputc('i', r);
+			//fputc('i', r);
 			fputc('\n', r);
 		}
 	}
